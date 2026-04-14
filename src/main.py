@@ -1,24 +1,51 @@
 import pandas as pd
+from pathlib import Path
 from clean import clean_activity, clean_sleep
 from eda import run_eda
 from visualization import visualize
 from modeling import linear_regression
 
-activity_file = "../dailyActivity_merged.csv"
-sleep_file = "../sleepDay_merged.csv"
+if __name__ == "__main__":
+    print("🚀 BẮT ĐẦU PHÂN TÍCH DỮ LIỆU FITNESS & GIẤC NGỦ\n")
 
-# 1. Làm sạch dữ liệu
-activity = clean_activity(activity_file, "../result/dailyActivity_cleaned.csv")
-sleep = clean_sleep(sleep_file, "../result/sleepDay_cleaned.csv")
+    # Đường dẫn từ src/ ra ngoài
+    project_root = Path(__file__).parent.parent
 
-# Merge dữ liệu
-merged = pd.merge(activity, sleep, left_on=['Id','ActivityDate'], right_on=['Id','SleepDay'], how='inner')
+    activity_file = str(project_root / "dailyActivity_merged.csv")
+    sleep_file    = str(project_root / "sleepDay_merged.csv")
 
-# 2. Khám phá dữ liệu
-run_eda(merged)
+    activity_output = str(project_root / "result" / "dailyActivity_cleaned.csv")
+    sleep_output    = str(project_root / "result" / "sleepDay_cleaned.csv")
 
-# 3. Trực quan hóa
-visualize(merged)
+    # 1. LÀM SẠCH DỮ LIỆU
+    activity = clean_activity(activity_file, activity_output)
+    sleep    = clean_sleep(sleep_file, sleep_output)
 
-# 4. Mô hình dự báo
-linear_regression(merged)
+    # 2. MERGE DỮ LIỆU
+    print("\n🔄 Đang merge hai bảng Activity và Sleep...")
+    merged = pd.merge(
+        activity,
+        sleep,
+        left_on=['Id', 'ActivityDate'],
+        right_on=['Id', 'SleepDay'],
+        how='left'                    # Giữ tất cả dữ liệu activity
+    )
+
+    merged = merged.drop(columns=['SleepDay'], errors='ignore')
+    merged.rename(columns={'ActivityDate': 'Date'}, inplace=True)
+
+    print(f"✅ Merge hoàn tất! Tổng số dòng: {merged.shape[0]}")
+    print(f"   → Số ngày không có dữ liệu ngủ: {merged['TotalMinutesAsleep'].isna().sum()}")
+
+    # 3. KHÁM PHÁ DỮ LIỆU (EDA)
+    run_eda(merged)
+
+    # 4. TRỰC QUAN HÓA
+    visualize(merged)
+
+    # 5. MÔ HÌNH DỰ BÁO
+    linear_regression(merged)
+
+    print("\n🎉 HOÀN THÀNH TOÀN BỘ BÀI PHÂN TÍCH!")
+    print("   File sạch đã lưu trong thư mục 'result/'")
+    print("   Hãy chụp màn hình các biểu đồ để đưa vào báo cáo.")

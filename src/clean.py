@@ -1,66 +1,67 @@
 import pandas as pd
+from pathlib import Path
 
-def clean_activity(activity_file, output_file):
-    # 1. Đọc dữ liệu
+def clean_activity(activity_file: str, output_file: str):
+    """Làm sạch dữ liệu hoạt động hàng ngày"""
+    print("🔄 Đang làm sạch dữ liệu Activity...")
     activity = pd.read_csv(activity_file)
 
-    # 2. Giữ lại các cột liên quan
     activity = activity[['Id', 'ActivityDate', 'TotalSteps', 'Calories', 'VeryActiveMinutes']]
 
-    # 3. Chuẩn hóa kiểu dữ liệu ngày tháng
-    activity['ActivityDate'] = pd.to_datetime(activity['ActivityDate'], format='%m/%d/%Y')
-
-    # 4. Xử lý missing values
+    # Chuẩn hóa ngày tháng
+    activity['ActivityDate'] = pd.to_datetime(
+        activity['ActivityDate'], format='%m/%d/%Y'
+    ).dt.normalize()
+    # xử lý missing values
     activity.fillna(activity.mean(numeric_only=True), inplace=True)
-
-    # 5. Loại bỏ dữ liệu trùng lặp
+    # loại bỏ trùng lặp
     activity.drop_duplicates(inplace=True)
 
-    # 6. Xử lý outlier: loại bỏ bước chân = 0 bất thường
-    outliers_activity = activity[(activity['TotalSteps'] == 0) & (activity['Calories'] > 2000)]
-    activity = activity.drop(outliers_activity.index)
+    # Xử lý outlier
+    outliers = activity[(activity['TotalSteps'] == 0) & (activity['Calories'] > 2000)]
+    activity = activity.drop(outliers.index)
 
-    # 7. Xuất dữ liệu sạch
+    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
     activity.to_csv(output_file, index=False)
-    print(f"✅ Đã lưu dữ liệu sạch vào {output_file}")
+    print(f"✅ Clean Activity xong → {output_file} | Shape: {activity.shape}")
     return activity
 
 
-def clean_sleep(sleep_file, output_file):
-    # 1. Đọc dữ liệu
+def clean_sleep(sleep_file: str, output_file: str):
+    """Làm sạch dữ liệu giấc ngủ"""
+    print("🔄 Đang làm sạch dữ liệu Sleep...")
     sleep = pd.read_csv(sleep_file)
 
-    # 2. Giữ lại các cột liên quan
     sleep = sleep[['Id', 'SleepDay', 'TotalMinutesAsleep', 'TotalTimeInBed']]
-
-    # 3. Chuẩn hóa kiểu dữ liệu ngày tháng
-    sleep['SleepDay'] = pd.to_datetime(sleep['SleepDay'], format='%m/%d/%Y %I:%M:%S %p')
-
-    # 4. Xử lý missing values
+     #chuẩn hóa ngày tháng
+    sleep['SleepDay'] = pd.to_datetime(
+        sleep['SleepDay'], format='%m/%d/%Y %I:%M:%S %p'
+    ).dt.normalize()
+    # xử lý missing values
     sleep.fillna(sleep.mean(numeric_only=True), inplace=True)
-
-    # 5. Loại bỏ dữ liệu trùng lặp
+    #loại bỏ trùng lặp
     sleep.drop_duplicates(inplace=True)
 
-    # 6. Xử lý outlier: loại bỏ trường hợp ngủ > thời gian trên giường
-    outliers_sleep = sleep[sleep['TotalMinutesAsleep'] > sleep['TotalTimeInBed']]
-    sleep = sleep.drop(outliers_sleep.index)
+    # Outlier
+    outliers = sleep[sleep['TotalMinutesAsleep'] > sleep['TotalTimeInBed']]
+    sleep = sleep.drop(outliers.index)
 
-    # 7. Xuất dữ liệu sạch
+    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
     sleep.to_csv(output_file, index=False)
-    print(f"✅ Đã lưu dữ liệu sạch vào {output_file}")
+    print(f"✅ Clean Sleep xong → {output_file} | Shape: {sleep.shape}")
     return sleep
 
 
 if __name__ == "__main__":
-    # File gốc nằm ngoài src/
-    activity_file = "dailyActivity_merged.csv"
-    sleep_file = "sleepDay_merged.csv"
+    # Test chạy riêng clean.py
+    base = Path(__file__).parent
+    project_root = base.parent
 
-    # File kết quả lưu vào result/
-    activity_output = "result/dailyActivity_cleaned.csv"
-    sleep_output = "result/sleepDay_cleaned.csv"
-
-    # Thực hiện làm sạch
-    clean_activity(activity_file, activity_output)
-    clean_sleep(sleep_file, sleep_output)
+    clean_activity(
+        activity_file=str(project_root / "dailyActivity_merged.csv"),
+        output_file=str(project_root / "result" / "dailyActivity_cleaned.csv")
+    )
+    clean_sleep(
+        sleep_file=str(project_root / "sleepDay_merged.csv"),
+        output_file=str(project_root / "result" / "sleepDay_cleaned.csv")
+    )
