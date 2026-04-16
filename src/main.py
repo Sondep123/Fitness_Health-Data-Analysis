@@ -28,7 +28,7 @@ if __name__ == "__main__":
         sleep,
         left_on=['Id', 'ActivityDate'],
         right_on=['Id', 'SleepDay'],
-        how='left'                    # Giữ tất cả dữ liệu activity
+        how='left'
     )
 
     merged = merged.drop(columns=['SleepDay'], errors='ignore')
@@ -45,7 +45,3 @@ if __name__ == "__main__":
 
     # 5. MÔ HÌNH DỰ BÁO
     linear_regression(merged)
-
-    print("\n🎉 HOÀN THÀNH TOÀN BỘ BÀI PHÂN TÍCH!")
-    print("   File sạch đã lưu trong thư mục 'result/'")
-    print("   Hãy chụp màn hình các biểu đồ để đưa vào báo cáo.")
