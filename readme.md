@@ -105,6 +105,7 @@ Toàn bộ quy trình được chạy thống nhất qua file **`main.py`**.
   + 6_steps_by_day_of_week.png
 
 ## 6 Cấu trúc thư mục dự án
+```text
 Fitness_Health Data Analy/
 ├── src/
 │   ├── clean.py
@@ -125,7 +126,7 @@ Fitness_Health Data Analy/
 ├── dailyActivity_merged.csv
 ├── sleepDay_merged.csv
 └── readme.md
-
+```
 ## 7 Chạy toàn bộ dự án
  - python main.py
 
