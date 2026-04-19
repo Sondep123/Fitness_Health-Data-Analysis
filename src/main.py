@@ -1,5 +1,6 @@
-import pandas as pd
 from pathlib import Path
+import pandas as pd
+
 from clean import clean_activity, clean_sleep
 from eda import run_eda
 from visualization import visualize
@@ -8,12 +9,14 @@ from modeling import linear_regression
 if __name__ == "__main__":
     print("🚀 BẮT ĐẦU PHÂN TÍCH DỮ LIỆU FITNESS & GIẤC NGỦ\n")
 
-    # Đường dẫn từ src/ ra ngoài
+    # === SỬA ĐƯỜNG DẪN THEO CẤU TRÚC CỦA BẠN ===
     project_root = Path(__file__).parent.parent
 
+    # File dữ liệu thô nằm cùng cấp với thư mục src và result
     activity_file = str(project_root / "dailyActivity_merged.csv")
     sleep_file    = str(project_root / "sleepDay_merged.csv")
 
+    # Output cleaned files
     activity_output = str(project_root / "result" / "dailyActivity_cleaned.csv")
     sleep_output    = str(project_root / "result" / "sleepDay_cleaned.csv")
 
@@ -45,3 +48,5 @@ if __name__ == "__main__":
 
     # 5. MÔ HÌNH DỰ BÁO
     linear_regression(merged)
+
+    print("\n🎉 HOÀN THÀNH TOÀN BỘ PIPELINE!")
