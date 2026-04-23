@@ -71,7 +71,6 @@ def linear_regression(df):
        "* Các điểm gần đường đỏ → dự đoán chính xác\n"
        "* Điểm xa đường → sai số lớn"
     )
-
     ax_text.text(
         0.05, 0.95, comment,
         fontsize=11,
