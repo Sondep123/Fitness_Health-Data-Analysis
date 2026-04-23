@@ -1,15 +1,16 @@
 # Fitness & Health Data Analysis  
 **Phân tích mối quan hệ giữa hoạt động thể chất và giấc ngủ**
 
-Dự án thực hiện phân tích dữ liệu Fitness & Sleep từ bộ dữ liệu FitBit, 
-tập trung vào việc khám phá mối quan hệ giữa hoạt động hàng ngày (số bước chân, calories, thời gian hoạt động mạnh) và chất lượng giấc ngủ.
+Dự án thực hiện phân tích dữ liệu Fitness & Sleep từ bộ dữ liệu FitBit, tập trung khám phá mối quan hệ giữa hoạt động hàng ngày (số bước chân, calories, thời gian hoạt động mạnh)
+và chất lượng giấc ngủ, đồng thời xây dựng mô hình dự báo lượng calories tiêu thụ.
 
 ## 1 Giới thiệu
 Dự án nhằm làm sạch, phân tích và mô hình hóa dữ liệu từ hai tập dữ liệu chính:
 - `dailyActivity_merged.csv`: dữ liệu hoạt động hàng ngày
 - `sleepDay_merged.csv`: dữ liệu giấc ngủ
-Mục tiêu chính là hiểu rõ cách hoạt động thể chất ảnh hưởng đến thời gian ngủ,
-đồng thời xây dựng mô hình dự báo lượng calories tiêu thụ dựa trên các chỉ số hoạt động.
+Mục tiêu chính là:
+- Hiểu rõ cách hoạt động thể chất ảnh hưởng đến thời gian ngủ.
+- Đồng thời xây dựng mô hình dự báo lượng calories tiêu thụ dựa trên các chỉ số hoạt động.
 
 ## 2 Mục tiêu dự án
 - Làm sạch và chuẩn hóa hai bộ dữ liệu Activity & Sleep.
@@ -66,7 +67,10 @@ Dự án tạo ra 6 biểu đồ chính:
 - Mô hình: **Linear Regression**
 - Features: `TotalSteps`, `VeryActiveMinutes`
 - Target: `Calories`
-- Đánh giá mô hình bằng: MAE, RMSE, R² Score
+- Đánh giá mô hình bằng: 
+ + MAE: 434.37
+ + RMSE: 541.32
+ + R² Score: 0.4408 → 44.1%
 
 ### bước 6. Entry point
 Toàn bộ quy trình được chạy thống nhất qua file **`main.py`**.
@@ -96,17 +100,18 @@ Toàn bộ quy trình được chạy thống nhất qua file **`main.py`**.
 ### 3. File kết quả trong thư mục result/
 - result/dailyActivity_cleaned.csv: Dữ liệu hoạt động sau khi làm sạch.
 - result/sleepDay_cleaned.csv: Dữ liệu giấc ngủ sau khi làm sạch.
-- result/figures/: Thư mục chứa 6 biểu đồ được xuất ra khi chạy chương trình:
+- result/figures/: Thư mục chứa 7 biểu đồ được xuất ra khi chạy chương trình:
   + 1_steps_vs_sleep.png
   + 2_correlation_heatmap.png
   + 3_steps_trend_over_time.png
   + 4_steps_distribution.png
   + 5_calories_vs_active_minutes.png
   + 6_steps_by_day_of_week.png
+  + 7_prediction_final.png
 
 ## 6 Cấu trúc thư mục dự án
 ```text
-Fitness_Health Data Analy/
+Fitness_Health_Data_Analysis/
 ├── src/
 │   ├── clean.py
 │   ├── eda.py
@@ -122,10 +127,11 @@ Fitness_Health Data Analy/
 │       ├── 3_steps_trend_over_time.png
 │       ├── 4_steps_distribution.png
 │       ├── 5_calories_vs_active_minutes.png
-│       └── 6_steps_by_day_of_week.png
+│       ├── 6_steps_by_day_of_week.png
+│       └── 7_prediction_final.png
 ├── dailyActivity_merged.csv
 ├── sleepDay_merged.csv
-└── readme.md
+└── README.md
 ```
 ## 7 Chạy toàn bộ dự án
  - python main.py
@@ -140,6 +146,13 @@ Project đã hoàn thành tốt các yêu cầu chính của đề bài:
 - Có đánh giá mô hình bằng các chỉ số MAE, RMSE và R².
 - Mô hình Linear Regression hiện tại là một baseline tốt, với MAE = 434.37 và RMSE = 541.32. Kết quả cho thấy mô hình có khả năng dự báo khá ổn định lượng calories dựa trên số bước chân và thời gian hoạt động mạnh.
 
-## 9 Thành viên làm dự án
+## 9 Hướng phát triển
+- Sử dụng thêm nhiều feature (distance, heart rate,…)
+- Áp dụng mô hình nâng cao:
+ + Random Forest
+ + XGBoost
+- Tách train/test để đánh giá chính xác hơn.
+
+## 10 Thành viên làm dự án
 - Nguyễn Lam Sơn - 20221628
 
