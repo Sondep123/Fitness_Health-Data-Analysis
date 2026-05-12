@@ -18,7 +18,6 @@ def clean_activity(activity_file: str, output_file: str):
     # Đếm trùng lặp trước khi xóa
     duplicates_count = activity.duplicated().sum()
     activity.drop_duplicates(inplace=True)
-
     # Xóa outlier rõ ràng
     outliers = activity[(activity['TotalSteps'] == 0) & (activity['Calories'] > 2000)]
     outliers_count = outliers.shape[0]
